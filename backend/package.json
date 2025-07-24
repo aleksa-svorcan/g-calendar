@@ -4,7 +4,7 @@
   "description": "Google calendar backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node index.js"
   },
   "author": "aleksa.svorcan@gmail.com",
   "license": "ISC",
@@ -13,8 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
+    "googleapis": "^154.0.0",
     "pg": "^8.16.3",
     "sequelize": "^6.37.7"
   }
