@@ -27,7 +27,10 @@ const User = sequelize.define('User', {
     },
     token_expires_at: {
         type: DataTypes.STRING
-    }
+    },
+    refresh_token_expires_at: {
+        type: DataTypes.STRING
+    },
 }, {
     tableName: 'users',
     timestamps: true,
