@@ -54,7 +54,7 @@ cd google-calendar-app
 ### 2. Setup PostgreSQL
 
 - Create a PostgreSQL database (e.g. `calendar_db`)
-- Import the included dump:
+- Import the included dump: calendar-schema found in backend/schema
 
 **Using psql**:
 ```bash
