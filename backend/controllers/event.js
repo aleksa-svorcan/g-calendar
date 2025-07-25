@@ -29,7 +29,7 @@ export const fetchEvents = async (req, res) => {
 
         // 2. Upsert to DB
         for (const evt of events.data.items) {
-            await upsertEvent({ ...evt, userId })  // Your service function should attach user_id
+            await upsertEvent(evt, userId)
         }
 
         // 3. Paginate from DB
@@ -61,7 +61,7 @@ export const createEvent = async (req, res) => {
     const userId = req.session.userId
     if (!userId) return res.status(401).json({ message: 'Not logged in' })
 
-    const user = await User.findByPk(userId)
+    const user = await findUserById(userId)
     if (!user) return res.status(404).json({ message: 'User not found' })
 
     const auth = getOAuthClient({
