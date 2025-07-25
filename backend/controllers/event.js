@@ -57,6 +57,7 @@ export const fetchEvents = async (req, res) => {
     }
 }
 
+
 export const createEvent = async (req, res) => {
     const userId = req.session.userId
     if (!userId) return res.status(401).json({ message: 'Not logged in' })
@@ -74,8 +75,14 @@ export const createEvent = async (req, res) => {
     const event = {
         summary: req.body.summary,
         description: req.body.description,
-        start: { dateTime: req.body.start },
-        end: { dateTime: req.body.end }
+        start: {
+            dateTime: new Date(req.body.start).toISOString(),
+            timeZone: 'UTC'
+        },
+        end: {
+            dateTime: new Date(req.body.end).toISOString(),
+            timeZone: 'UTC'
+        }
     }
 
     try {
@@ -85,7 +92,6 @@ export const createEvent = async (req, res) => {
         })
 
         res.json(response.data)
-
     } catch (err) {
         console.error('Error while creating calendar event:', err)
         res.status(500).json({ message: 'Failed to create calendar event' })
