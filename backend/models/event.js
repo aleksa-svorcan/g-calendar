@@ -4,7 +4,7 @@ import User from './user.js'
 
 const Event = sequelize.define('Event', {
     id: {
-        type: DataTypes.STRING, // Matches Google event ID
+        type: DataTypes.STRING,
         primaryKey: true
     },
     summary: {
@@ -14,10 +14,10 @@ const Event = sequelize.define('Event', {
         type: DataTypes.STRING
     },
     start_date: {
-        type: DataTypes.DATEONLY // "2026-10-28"
+        type: DataTypes.STRING
     },
     end_date: {
-        type: DataTypes.DATEONLY // "2026-10-29"
+        type: DataTypes.STRING
     },
     ical_uid: {
         type: DataTypes.STRING,
@@ -38,7 +38,6 @@ const Event = sequelize.define('Event', {
     updatedAt: 'updated_at'
 })
 
-// Associations
 Event.belongsTo(User, { foreignKey: 'user_id' })
 User.hasMany(Event, { foreignKey: 'user_id' })
 

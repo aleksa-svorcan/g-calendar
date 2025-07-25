@@ -1,7 +1,7 @@
 import {google} from "googleapis";
 import {findUserById} from "../services/user.js"
 import {getOAuthClient} from "../services/gAuth.js";
-import {getAll, upsertEvent} from "../services/event.js"
+import {getAll, upsertEvent, deleteAllEventsForUser} from "../services/event.js"
 
 export const fetchEvents = async (req, res) => {
     const userId = req.session.userId
@@ -18,7 +18,7 @@ export const fetchEvents = async (req, res) => {
 
         const calendar = google.calendar({ version: 'v3', auth })
 
-        // 1. Fetch from Google
+
         const events = await calendar.events.list({
             calendarId: 'primary',
             timeMin: new Date().toISOString(),
@@ -27,26 +27,26 @@ export const fetchEvents = async (req, res) => {
             orderBy: 'startTime'
         })
 
-        // 2. Upsert to DB
+        await deleteAllEventsForUser(userId)
+
         for (const evt of events.data.items) {
             await upsertEvent(evt, userId)
         }
 
-        // 3. Paginate from DB
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 10
         const ascending = parseInt(req.query.ascending) === 1
-        const offset = (page - 1) * limit
+        const days = parseInt(req.query.days) || 7
 
-        const result = await getAll({ userId, limit, offset, ascending })
+        const result = await getAll({ userId, page, limit, ascending, days })
 
         res.json({
-            data: result.rows,
+            data: result.groupedEvents,
             meta: {
-                total: result.count,
+                total: result.totalGroups,
                 per_page: limit,
                 current_page: page,
-                total_pages: Math.ceil(result.count / limit),
+                total_pages: Math.ceil(result.totalGroups / limit),
                 ascending: ascending ? 1 : 0
             }
         })
